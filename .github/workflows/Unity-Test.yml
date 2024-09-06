@@ -26,13 +26,6 @@ jobs:
           lfs: true
 
       ###########################
-      #     Install xvfb (Linux) #
-      ###########################
-      - name: Install xvfb (Linux only)
-        if: runner.os == 'Linux'
-        run: sudo apt-get install -y xvfb
-
-      ###########################
       #         Setup Unity     #
       ###########################
       - name: Set up Unity
@@ -55,14 +48,11 @@ jobs:
             Library-${{ matrix.os }}-${{ matrix.unityVersion }}
 
       ###########################
-      #      Run Unity Tests     #
+      #     Run Unity Tests      #
       ###########################
       - name: Run ${{ matrix.testMode }} tests
-        run: |
-          xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' \
-          unity-editor \
-            -projectPath . \
-            -runTests \
-            -testPlatform ${{ matrix.testMode }} \
-            -logfile /dev/stdout \
-            -testResults /test-results.xml
+        uses: game-ci/unity-test-runner@v3
+        with:
+          unityVersion: ${{ matrix.unityVersion }}
+          testMode: ${{ matrix.testMode }}
+          customParameters: -projectPath . -logfile /dev/stdout
