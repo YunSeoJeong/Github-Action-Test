@@ -1,4 +1,4 @@
-name: Validate Branch Naming, Commit Message, and Release Version
+name: Validate Branch Naming and Commit Message
 
 on:
   push:
@@ -48,35 +48,3 @@ jobs:
             exit 1
           fi
           echo "✅ Last commit messages are valid."
-
-        # 릴리즈 버전 검사
-      - name: Validate release commit message format
-        run: |
-          RELEASE_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-          
-          if [[ ! "$RELEASE_COMMIT_MESSAGE" =~ ^release:\ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-            echo "❌ Commit message does not follow the release format 'release: vMAJOR.MINOR.PATCH'."
-            exit 1
-          fi
-
-          # Extract version number from commit message
-          NEW_VERSION=$(echo "$RELEASE_COMMIT_MESSAGE" | sed -n 's/^release: v\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
-
-          echo "Detected new version: $NEW_VERSION"
-
-          # Get the latest release commit from the history
-          LATEST_VERSION=$(git log --grep="^release: v" --pretty=%B | sed -n 's/^release: v\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p' | sort -V | tail -n 1)
-
-          if [ -z "$LATEST_VERSION" ]; then
-            echo "✅ No previous release found, this is the first release."
-          else
-            echo "Latest release version: $LATEST_VERSION"
-
-            if [ "$(printf '%s\n' "$NEW_VERSION" "$LATEST_VERSION" | sort -V | head -n1)" != "$LATEST_VERSION" ]; then
-              echo "✅ New version '$NEW_VERSION' is greater than the latest version '$LATEST_VERSION'."
-            else
-              echo "❌ New version '$NEW_VERSION' must be greater than the latest version '$LATEST_VERSION'."
-              exit 1
-            fi
-          fi
-          echo "✅ Release commit message is valid and version is greater than the previous version."
