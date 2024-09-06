@@ -24,7 +24,9 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/')
         run: |
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-          if [[ ! "$BRANCH_NAME" =~ ^(feature|release|hotfix)\/[a-zA-Z0-9_-]+$ ]]; then
+          if [[ "$BRANCH_NAME" == "main" || "$BRANCH_NAME" == "develop" ]]; then
+            echo "Skipping branch name validation for 'main' or 'develop' branch."
+          elif [[ ! "$BRANCH_NAME" =~ ^(feature|release|hotfix)\/[a-zA-Z0-9_-]+$ ]]; then
             echo "❌ Branch name '$BRANCH_NAME' does not follow the naming convention."
             exit 1
           fi
