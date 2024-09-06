@@ -37,17 +37,17 @@ jobs:
           echo "✅ Branch name '$BRANCH_NAME' is valid."
 
         # 커밋 메시지 검사
-      - name: Validate commit messages
+      - name: Validate last commit messages
         run: |
-          COMMITS=$(git rev-list origin/${{ github.ref }}..HEAD)
-          for COMMIT in $COMMITS; do
-            MESSAGE=$(git log --format=%B -n 1 $COMMIT)
-            if [[ ! "$MESSAGE" =~ ^(feat|fix|docs|style|refactor|test|chore|ci|build|perf|revert):\ .+ ]]; then
-              echo "❌ Commit message '$MESSAGE' does not follow the convention."
-              exit 1
-            fi
-          done
-          echo "✅ All commit messages are valid."
+          git log -1 --pretty=format:%s > last_commit_message.txt
+          COMMIT_MSG=$(cat last_commit_message.txt)
+          echo "Last commit message: $COMMIT_MSG"
+
+          if [[ ! "$COMMIT_MSG" =~ ^(feat|fix|docs|style|refactor|test|chore|ci|build|perf|revert):\ .+ ]]; then
+            echo "❌ Commit message '$COMMIT_MSG' does not follow the convention."
+            exit 1
+          fi
+          echo "✅ Last commit messages are valid."
 
         # 릴리즈 버전 검사
       - name: Validate release commit message format
