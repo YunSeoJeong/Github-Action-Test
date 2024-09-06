@@ -1,4 +1,4 @@
-name: Validate Branch Naming and Commit Message
+name: Naming Rule
 
 on:
   push:
