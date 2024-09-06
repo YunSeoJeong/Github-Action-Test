@@ -11,7 +11,6 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - windows-2022
         unityVersion:
           - 2022.3.17f1
         testMode:
@@ -25,6 +24,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           lfs: true
+
+      ###########################
+      #     Install xvfb (Linux) #
+      ###########################
+      - name: Install xvfb (Linux only)
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y xvfb
 
       ###########################
       #         Setup Unity     #
