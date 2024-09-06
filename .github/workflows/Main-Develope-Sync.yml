@@ -1,0 +1,49 @@
+name: Check Main to Develop Sync
+
+# 매일 자정에 워크플로우 실행
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  check-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+		  # 전체 커밋 히스토리를 가져옴
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  
+
+      - name: Fetch all branches
+        run: |
+          git fetch origin main
+          git fetch origin develop
+          
+			# develop 에는 없는 commit 을 main 이 가지고 있는지 검사
+      - name: Check if main is fully merged into develop
+        run: |
+          UNMERGED_COMMITS=$(git log origin/develop..origin/main --oneline)
+
+          if [ -z "$UNMERGED_COMMITS" ]; then
+            echo "✅ main is fully merged into develop."
+          else
+            echo "⚠️ WARNING: main has commits that are not merged into develop!"
+            echo "$UNMERGED_COMMITS"
+            exit 1
+          fi
+      
+      # 워크플로우 실패시 노션으로 알림
+      - name: Send Slack notification on failure
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: 'GitHub Actions'
+          fields: repo,message,commit,author
+          custom_field1_title: 'Branches'
+          custom_field1_value: "main and develop"
+          mention: 'here'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
