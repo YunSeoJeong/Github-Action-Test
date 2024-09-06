@@ -2,12 +2,8 @@ name: Check Main to Develop Sync
 
 # 매일 자정에 워크플로우 실행
 on:
-  push:
-    branches:
-      - '**'   # 모든 브랜치에 대한 푸시를 감시
-  pull_request:
-    branches:
-      - '**'   # 모든 브랜치에 대한 PR을 감시
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   check-sync:
