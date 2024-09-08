@@ -16,7 +16,7 @@ jobs:
         dotnet-version: '6.x'  # 사용하고 있는 .NET 버전에 맞게 설정
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ./Scripts.csproj
 
     - name: Run dotnet-format
       run: dotnet format --verify-no-changes --verbosity diagnostic
