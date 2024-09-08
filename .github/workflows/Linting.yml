@@ -4,10 +4,15 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Install .NET Framework 4.0 Developer Pack
+        run: |
+          Invoke-WebRequest -Uri "https://download.microsoft.com/download/B/4/8/B48EAA12-083C-4FB6-9CB8-5FF70F62A116/dotNetFx40_Full_x86_x64.exe" -OutFile dotNetFx40_Full_x86_x64.exe
+          Start-Process -FilePath dotNetFx40_Full_x86_x64.exe -ArgumentList "/q" -Wait
         
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
