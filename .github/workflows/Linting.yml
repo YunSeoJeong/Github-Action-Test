@@ -3,26 +3,22 @@ name: .NET Linting
 on: [push, pull_request]
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
 
-    - name: Clear NuGet cache
-      run: dotnet nuget locals all --clear
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '6.x'  # 사용하고 있는 .NET 버전에 맞게 설정
+      - name: Build the project
+        run: dotnet build --no-restore --configuration Release
 
-    - name: Restore dependencies
-      run: dotnet restore ./Scripts.csproj --no-cache
-
-    #- name: Build the solution
-    #  run: dotnet build ./Scripts.csproj --no-restore --configuration Release
-
-    - name: Run dotnet-format
-      run: dotnet format ./Scripts.csproj --verify-no-changes --verbosity diagnostic
+      - name: Run StyleCop Analyzers
+        run: dotnet build --no-restore --configuration Release /p:StyleCop=true
