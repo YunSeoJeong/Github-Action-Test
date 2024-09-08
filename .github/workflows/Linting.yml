@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout repository
@@ -16,13 +16,13 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.401'  # 사용하고 있는 .NET 버전에 맞게 설정
+        dotnet-version: '4.7.1'  # 사용하고 있는 .NET 버전에 맞게 설정
 
     - name: Restore dependencies
       run: dotnet restore ./Github-Action-Test.sln --no-cache
 
     - name: Build the solution
-      run: dotnet build ./Github-Action-Test.sln --no-restore
+      run: dotnet build ./Github-Action-Test.sln --no-restore --configuration Release
 
     - name: Run dotnet-format
       run: dotnet format ./Github-Action-Test.sln --verify-no-changes --verbosity diagnostic
