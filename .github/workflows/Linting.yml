@@ -19,4 +19,4 @@ jobs:
     #  run: dotnet restore ./Github-Action-Test/Github-Action-Test.sln
 
     - name: Run dotnet-format
-      run: dotnet format Github-Action-Test.sln --verify-no-changes --verbosity diagnostic
+      run: dotnet format --verify-no-changes --verbosity diagnostic
