@@ -14,9 +14,12 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '6.x'  # 사용하고 있는 .NET 버전에 맞게 설정
+    
+    - name: Change directory to solution folder
+      run: cd..  # .sln 파일이 있는 경로로 변경
 
     #- name: Restore dependencies
     #  run: dotnet restore ./Github-Action-Test/Github-Action-Test.sln
 
     - name: Run dotnet-format
-      run: dotnet format --verify-no-changes --verbosity diagnostic
+      run: dotnet format ./Github-Action-Test.sln --verify-no-changes --verbosity diagnostic
