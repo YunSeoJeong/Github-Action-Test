@@ -16,7 +16,7 @@ jobs:
         dotnet-version: '6.x'  # 사용하고 있는 .NET 버전에 맞게 설정
 
     - name: Restore dependencies
-      run: dotnet restore ./Github-Action-Test.sln
+      run: dotnet restore ./Github-Action-Test/Github-Action-Test.sln
 
     - name: Run dotnet-format
-      run: dotnet format Github-Action-Test.sln --verify-no-changes --verbosity diagnostic
+      run: dotnet format ./Github-Action-Test/Github-Action-Test.sln --verify-no-changes --verbosity diagnostic
