@@ -20,6 +20,4 @@ jobs:
 
     - name: Run dotnet-format
       run: |
-        dotnet format --check --folder . --verbosity diagnostic
-      env:
-        PATH: ${{ runner.tool_cache }}/dotnet:$PATH
+        dotnet format --verbosity diagnostic
