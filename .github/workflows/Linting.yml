@@ -3,27 +3,26 @@ name: .NET Linting
 on: [push, pull_request]
 
 jobs:
-  build:
+  lint:
     runs-on: windows-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Install .NET Framework 4.0 Developer Pack
-        run: |
-          Invoke-WebRequest -Uri "https://download.visualstudio.microsoft.com/download/pr/1234567890/file.dotNetFx40_Full_x86_x64.exe" -OutFile dotNetFx40_Full_x86_x64.exe
-          Start-Process -FilePath dotNetFx40_Full_x86_x64.exe -ArgumentList "/q" -Wait
-        
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.x'
+    - name: Clear NuGet cache
+      run: dotnet nuget locals all --clear
 
-      - name: Restore dependencies
-        run: dotnet restore ./Scripts.csproj
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.x'  # 사용하고 있는 .NET 버전에 맞게 설정
 
-      - name: Build the project
-        run: dotnet build ./Scripts.csproj --no-restore --configuration Release
+    - name: Restore dependencies
+      run: dotnet restore ./Scripts.csproj --no-cache
 
-      - name: Run StyleCop Analyzers
-        run: dotnet build ./Scripts.csproj --no-restore --configuration Release /p:StyleCop=true
+    - name: Build the solution
+      run: dotnet build ./Scripts.csproj --no-restore --configuration Release
+
+    - name: Run dotnet-format
+      run: dotnet format ./Scripts.csproj --verify-no-changes --verbosity diagnostic
