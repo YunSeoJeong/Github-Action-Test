@@ -18,7 +18,7 @@ jobs:
         run: dotnet restore ./Scripts.csproj
 
       - name: Build the project
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build ./Scripts.csproj --no-restore --configuration Release
 
       - name: Run StyleCop Analyzers
-        run: dotnet build --no-restore --configuration Release /p:StyleCop=true
+        run: dotnet build ./Scripts.csproj --no-restore --configuration Release /p:StyleCop=true
