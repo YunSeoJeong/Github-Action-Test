@@ -19,7 +19,7 @@ jobs:
       run: pwd  # 현재 작업 디렉터리 출력
 
     - name: Restore dependencies
-      run: dotnet restore /home/runner/work/Github-Action-Test/Scripts.csproj
+      run: dotnet restore /home/runner/work/Github-Action-Test/Github-Action-Test/Scripts.csproj
 
     - name: Run dotnet-format
-      run: dotnet format /home/runner/work/Github-Action-Test/Scripts.csproj --verify-no-changes --verbosity diagnostic
+      run: dotnet format /home/runner/work/Github-Action-Test/Github-Action-Test/Scripts.csproj --verify-no-changes --verbosity diagnostic
