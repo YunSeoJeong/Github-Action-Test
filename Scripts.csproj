@@ -2,11 +2,6 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Generated file, do not modify, your changes will be overwritten (use AssetPostprocessor.OnGeneratedCSProject) -->
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <!-- CI 환경에서는 Analyzers 비활성화 -->
-    <RunAnalyzers Condition="'$(CI)' != 'true'">false</RunAnalyzers>
-  </PropertyGroup>
-  <PropertyGroup>
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -59,6 +54,9 @@
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2022.3.17f1</UnityVersion>
   </PropertyGroup>
+  <ItemGroup Condition="'$(CI)' != 'true'">
+  <Analyzer Include="path-to\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
   <ItemGroup>
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.17f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
