@@ -19,4 +19,7 @@ jobs:
       run: dotnet tool install -g dotnet-format
 
     - name: Run dotnet-format
-      run: dotnet format --check --verbosity diagnostic
+      run: |
+        dotnet format --check --folder . --verbosity diagnostic
+      env:
+        PATH: ${{ runner.tool_cache }}/dotnet:$PATH
