@@ -3,31 +3,20 @@ name: .NET Linting
 on: [push, pull_request]
 
 jobs:
-  lint:
-    runs-on: windows-latest
+  check-code-format:
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v2
 
-    - name: Clear NuGet cache
-      run: dotnet nuget locals all --clear
-
-    - name: Install .NET Framework 4.8 Developer Pack
-      run: |
-        Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/?linkid=2099382" -OutFile dotnetfx471.exe
-        Start-Process -FilePath dotnetfx471.exe -ArgumentList "/q" -Wait
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '5.x'  # 사용하고 있는 .NET 버전에 맞게 설정
+        dotnet-version: '6.0.x'
 
-    - name: Restore dependencies
-      run: dotnet restore ./Scripts.csproj --no-cache
+    - name: Install dependencies
+      run: dotnet restore
 
-    - name: Build the solution
-      run: dotnet build ./Scripts.csproj --no-restore --configuration Release
-
-    - name: Run dotnet-format
-      run: dotnet format ./Scripts.csproj --verify-no-changes --verbosity diagnostic
+    - name: Run code format check
+      run: dotnet format --verify-no-changes
