@@ -16,7 +16,7 @@ jobs:
         dotnet-version: '6.0.x'
 
     - name: Install dependencies
-      run: dotnet restore ./
+      run: dotnet restore ./Scripts.csproj
 
     - name: Run code format check
       run: dotnet format ./ --verify-no-changes
