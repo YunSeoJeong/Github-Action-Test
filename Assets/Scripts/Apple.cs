@@ -10,4 +10,9 @@ public class Apple : MonoBehaviour
     {
         Number = number;
     }
+
+    public void hello()
+    {
+
+    }
 }
